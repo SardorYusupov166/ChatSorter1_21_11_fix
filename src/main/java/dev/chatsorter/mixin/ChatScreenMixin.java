@@ -33,11 +33,6 @@ public abstract class ChatScreenMixin extends Screen {
         chatsorter$search.setText(ChatSorter.searchQuery());
         chatsorter$search.setChangedListener(ChatSorter::setSearchQuery);
         this.addDrawableChild(chatsorter$search);
-        if (dev.chatsorter.RulesIntegration.available()) {
-            this.addDrawableChild(net.minecraft.client.gui.widget.ButtonWidget.builder(Text.literal("Правила"),
-                b -> dev.chatsorter.RulesIntegration.open((Screen)(Object)this))
-                .dimensions(5, 29, 82, 18).build());
-        }
     }
     private boolean chatsorter$dragging = false;
     private boolean chatsorter$resizing = false;
@@ -74,6 +69,14 @@ public abstract class ChatScreenMixin extends Screen {
                 context.drawTextWithShadow(this.textRenderer, number, bx, y - 6, 0xFFFFFFFF);
             }
         }
+        if (RulesIntegration.available()) {
+            int left = 5, top = 7, buttonWidth = 82, buttonHeight = 17;
+            boolean hovered = mouseX >= left && mouseX < left + buttonWidth && mouseY >= top && mouseY < top + buttonHeight;
+            context.fill(left, top, left + buttonWidth, top + buttonHeight, hovered ? ChatTheme.accent() : 0xCB25282D);
+            context.fill(left, top + buttonHeight - 2, left + buttonWidth, top + buttonHeight, ChatTheme.bright());
+            context.drawCenteredTextWithShadow(this.textRenderer, "Правила", left + buttonWidth / 2, top + 4,
+                hovered ? ChatTheme.text() : 0xFFD3D5D6);
+        }
     }
 
     // Vanilla hit testing redraws text into a ClickHandler without a DrawContext.
@@ -94,6 +97,12 @@ public abstract class ChatScreenMixin extends Screen {
                 cir.setReturnValue(true);
                 return;
             }
+        }
+        if (click.button() == 0 && RulesIntegration.available()
+                && click.x() >= 5 && click.x() < 87 && click.y() >= 7 && click.y() < 24) {
+            RulesIntegration.open((Screen)(Object)this);
+            cir.setReturnValue(true);
+            return;
         }
         if (click.button() == 1 && chatsorter$copyAt(mouseX, mouseY)) {
             cir.setReturnValue(true);
