@@ -3,6 +3,8 @@ package dev.chatsorter.mixin;
 import dev.chatsorter.ChatSorter;
 import dev.chatsorter.ChatPosition;
 import dev.chatsorter.KeywordAlerts;
+import dev.chatsorter.ChatTheme;
+import dev.chatsorter.RulesIntegration;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
